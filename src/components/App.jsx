@@ -5,12 +5,6 @@ import { Searchbar, Button, Loader, Modal, ImageGallery } from 'components';
 import 'react-toastify/dist/ReactToastify.css';
 
 export class App extends Component {
-  initialState = {
-    images: [],
-    page: 1,
-    error: '',
-  };
-
   state = {
     images: [],
     query: '',
@@ -52,7 +46,7 @@ export class App extends Component {
       return toast.info('Please enter your query!');
     }
 
-    this.setState({ query, ...this.initialState });
+    this.setState({ query, images: [], page: 1, error: '' });
   };
 
   onLoadMore = () => {
