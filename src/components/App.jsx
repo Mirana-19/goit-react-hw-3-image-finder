@@ -25,21 +25,27 @@ export class App extends Component {
     const { query, page } = this.state;
 
     if (query !== prevState.query || page !== prevState.page) {
-      this.setState({ isLoading: true });
-      getImages(this.state.query, this.state.page)
-        .then(({ hits, totalHits }) => {
-          if (!hits.length) {
-            return toast.error('No images found');
-          }
-          this.setState(prevState => ({
-            images: [...prevState.images, ...hits],
-            totalHits,
-          }));
-        })
-        .catch(() => toast.error('Sorry, something went wrong!'))
-        .finally(() => this.setState({ isLoading: false }));
+      this.fetchData();
     }
   }
+
+  fetchData = () => {
+    const { query, page } = this.state;
+    this.setState({ isLoading: true });
+
+    getImages(query, page)
+      .then(({ hits, totalHits }) => {
+        if (!hits.length) {
+          return toast.error('No images found');
+        }
+        this.setState(prevState => ({
+          images: [...prevState.images, ...hits],
+          totalHits,
+        }));
+      })
+      .catch(() => toast.error('Sorry, something went wrong!'))
+      .finally(() => this.setState({ isLoading: false }));
+  };
 
   onFormSubmit = query => {
     if (!query.trim()) {
@@ -59,16 +65,15 @@ export class App extends Component {
 
   render() {
     const { images, totalHits, isLoading, openModal } = this.state;
+    const hasMoreImages = images.length < totalHits;
+
     return (
       <>
         <ToastContainer />
         <Searchbar onFormSubmit={this.onFormSubmit} />
         <ImageGallery images={images} onImgClick={this.closeModal} />
 
-        {totalHits && images.length < totalHits && (
-          <Button onClick={this.onLoadMore} />
-        )}
-
+        {hasMoreImages && <Button onClick={this.onLoadMore} />}
         {isLoading && <Loader />}
         {openModal && <Modal img={openModal} closeModal={this.closeModal} />}
       </>
