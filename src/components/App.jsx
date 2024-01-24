@@ -9,7 +9,6 @@ export class App extends Component {
     images: [],
     query: '',
     page: 1,
-    error: '',
     totalHits: 0,
     isLoading: false,
     openModal: '',
@@ -46,7 +45,7 @@ export class App extends Component {
       return toast.info('Please enter your query!');
     }
 
-    this.setState({ query, images: [], page: 1, error: '' });
+    this.setState({ query, images: [], page: 1 });
   };
 
   onLoadMore = () => {

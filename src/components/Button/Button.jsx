@@ -4,4 +4,5 @@ export const Button = ({ onClick }) => {
       Load more
     </button>
   );
+  
 };
